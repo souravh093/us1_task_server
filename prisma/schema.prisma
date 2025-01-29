@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoleEnum {
+  USER
+  ADMIN
+}
+
+model User {
+  id           String       @id @default(uuid())
+  name         String
+  email        String       @unique
+  password     String
+  profilePhoto String       @db.Text
+  role         RoleEnum     @default(USER)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  skill        Skill[]
+  UserProfile  UserProfile?
+  session      Session[]    @relation("RequestorRelation")
+  review       Review[]
+}
+
+model UserProfile {
+  id      String @id @default(uuid())
+  bio     String
+  address String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String @unique
+}
+
+enum SkillCategoryEnum {
+  PROGRAMMING
+  DESIGN
+  MARKETING
+  BUSINESS
+  MUSIC
+  PHOTOGRAPHY
+  VIDEOGRAPHY
+  WRITING
+  COOKING
+  LANGUAGE
+  FITNESS
+  OTHER
+}
+
+enum LevelEnum {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model Skill {
+  id           String            @id @default(uuid())
+  name         String
+  category     SkillCategoryEnum
+  description  String
+  image        String            @db.Text
+  level        LevelEnum
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  availability Availability[]
+  session      Session[]
+}
+
+enum AvailabilityStatus {
+  AVAILABLE
+  UNAVAILABLE
+}
+
+model Availability {
+  id        String             @id @default(uuid())
+  skillId   String
+  dayOfWeek DayOfWeek
+  status    AvailabilityStatus @default(AVAILABLE)
+  startTime String
+  endTime   String
+  skill     Skill              @relation(fields: [skillId], references: [id])
+  session   Session[]
+}
+
+enum DayOfWeek {
+  SUNDAY
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+}
+
+enum SessionStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  COMPLETED
+}
+
+model Session {
+  id             String        @id @default(uuid())
+  skillId        String
+  requestorId    String
+  status         SessionStatus
+  meetingLink    String?       @db.Text
+  skill          Skill         @relation(fields: [skillId], references: [id])
+  requestor      User          @relation(fields: [requestorId], references: [id], name: "RequestorRelation")
+  availabilityId String
+  availability   Availability  @relation(fields: [availabilityId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  review         Review[]
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  sessionId  String
+  rating     Int
+  comment    String
+  reviewerId String
+  reviewer   User     @relation(fields: [reviewerId], references: [id])
+  session    Session  @relation(fields: [sessionId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
