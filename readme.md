@@ -1,3 +1,15 @@
+<!-- 
+PORT=5000
+DATABASE_URL=postgresql://neondb_owner:npg_LK3HtsARqu7F@ep-blue-band-a1hzb6ah-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
+ADMIN_EMAIL=souravh093@gmail.com
+ADMIN_PASS=admin@123
+JWT_SECRET=b9173f97-4d26-4aab-b905-a48f83eea75e
+JWT_EXPIRE=365d
+SERVER_URL=http://localhost:5000
+CLIENT_URL=http://localhost:3000
+
+ -->
+
 # Project Overview
 
 # Project Name: LOOMORA.
