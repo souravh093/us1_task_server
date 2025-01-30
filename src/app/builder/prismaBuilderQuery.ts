@@ -1,4 +1,4 @@
-export const buildPrismaQuery = <TWhereInput, TOrderByInput>({
+export const  buildPrismaQuery = <TWhereInput, TOrderByInput>({
   searchFields = [],
   searchTerm = '',
   filter = {} as TWhereInput,

@@ -67,6 +67,8 @@ model Skill {
   userId       String
   availability Availability[]
   session      Session[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @default(now()) @updatedAt
 }
 
 enum AvailabilityStatus {

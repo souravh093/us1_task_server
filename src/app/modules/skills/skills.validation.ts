@@ -28,6 +28,22 @@ const createSkillValidationSchema = z.object({
       required_error: 'Skills level is required',
     }),
     userId: z.string({ required_error: 'User ID is required' }),
+    availability: z.array(
+      z.object({
+        dayOfWeek: z.enum([
+          'SUNDAY',
+          'MONDAY',
+          'TUESDAY',
+          'WEDNESDAY',
+          'THURSDAY',
+          'FRIDAY',
+          'SATURDAY',
+        ], { required_error: 'Day of week is required' }),
+        status: z.enum(['AVAILABLE', 'UNAVAILABLE'], { required_error: 'Status is required' }).default('AVAILABLE'),
+        startTime: z.string({ required_error: 'Start time is required' }),
+        endTime: z.string({ required_error: 'End time is required' }),
+      })
+    ).optional(),
   }),
 });
 

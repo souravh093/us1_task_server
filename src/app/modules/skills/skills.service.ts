@@ -2,17 +2,23 @@ import { Skill } from '@prisma/client';
 import prisma from '../../../db/db.config';
 import { buildPrismaQuery } from '../../builder/prismaBuilderQuery';
 
-const createSkillsIntoDB = async (payload: Skill) => {
+const createSkillsIntoDB = async (payload: any) => {
   const result = await prisma.skill.create({
-    data: payload,
+    data: {
+      ...payload,
+      availability: {
+        create: payload.availability,
+      },
+    },
   });
 
   return result;
 };
 
 const getSkillsFromDB = async (query: Record<string, any>) => {
+
   const skillQuery = buildPrismaQuery({
-    searchFields: ['name', 'category', 'level'],
+    searchFields: ['name'],
     searchTerm: query.searchTerm,
     filter: query.filter && JSON.parse(query.filter),
     orderBy: query.orderBy && JSON.parse(query.orderBy),
@@ -23,6 +29,8 @@ const getSkillsFromDB = async (query: Record<string, any>) => {
   const totalSkills = await prisma.skill.count({
     where: skillQuery.where,
   });
+
+
 
   const totalPages = Math.ceil(totalSkills / skillQuery.take);
 

@@ -18,7 +18,6 @@ router.get('/', auth(RoleEnum.USER, RoleEnum.ADMIN), SkillController.getSkills);
 
 router.get(
   '/:id',
-  auth(RoleEnum.USER, RoleEnum.ADMIN),
   SkillController.getSkillById,
 );
 
