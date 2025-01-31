@@ -61,6 +61,7 @@ model Skill {
   name         String
   category     SkillCategoryEnum
   description  String
+  requestCount Int               @default(0)
   image        String            @db.Text
   level        LevelEnum
   user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -83,7 +84,7 @@ model Availability {
   status    AvailabilityStatus @default(AVAILABLE)
   startTime String
   endTime   String
-  skill     Skill              @relation(fields: [skillId], references: [id])
+  skill     Skill              @relation(fields: [skillId], references: [id], onDelete: Cascade)
   session   Session[]
 }
 
@@ -111,9 +112,9 @@ model Session {
   status         SessionStatus
   meetingLink    String?       @db.Text
   skill          Skill         @relation(fields: [skillId], references: [id])
-  requestor      User          @relation(fields: [requestorId], references: [id], name: "RequestorRelation")
+  requestor      User          @relation(fields: [requestorId], references: [id], name: "RequestorRelation", onDelete: Cascade)
   availabilityId String
-  availability   Availability  @relation(fields: [availabilityId], references: [id])
+  availability   Availability  @relation(fields: [availabilityId], references: [id], onDelete: Cascade)
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   review         Review[]
@@ -125,8 +126,8 @@ model Review {
   rating     Int
   comment    String
   reviewerId String
-  reviewer   User     @relation(fields: [reviewerId], references: [id])
-  session    Session  @relation(fields: [sessionId], references: [id])
+  reviewer   User     @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  session    Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }

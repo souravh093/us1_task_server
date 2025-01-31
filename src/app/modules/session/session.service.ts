@@ -41,7 +41,11 @@ const getSessionsFromDB = async (query: Record<string, any>) => {
     ...sessionQuery,
     include: {
       availability: true,
-      skill: true,
+      skill: {
+        include: {
+          user: true,
+        }
+      },
       requestor: true,
     },
   });
@@ -72,6 +76,7 @@ const getSessionByIdFromDB = async (id: string) => {
 };
 
 const updateSessionIntoDB = async (id: string, payload: Session) => {
+  console.log('payload', payload);
   await prisma.session.findUniqueOrThrow({
     where: {
       id,
@@ -84,6 +89,8 @@ const updateSessionIntoDB = async (id: string, payload: Session) => {
     },
     data: payload,
   });
+
+  console.log('result', result);
 
   return result;
 };
