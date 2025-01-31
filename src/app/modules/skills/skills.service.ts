@@ -16,7 +16,6 @@ const createSkillsIntoDB = async (payload: any) => {
 };
 
 const getSkillsFromDB = async (query: Record<string, any>) => {
-
   const skillQuery = buildPrismaQuery({
     searchFields: ['name'],
     searchTerm: query.searchTerm,
@@ -30,8 +29,6 @@ const getSkillsFromDB = async (query: Record<string, any>) => {
     where: skillQuery.where,
   });
 
-
-
   const totalPages = Math.ceil(totalSkills / skillQuery.take);
 
   const result = await prisma.skill.findMany({
@@ -39,6 +36,7 @@ const getSkillsFromDB = async (query: Record<string, any>) => {
     include: {
       user: true,
       availability: true,
+      session: true,
     },
   });
 
