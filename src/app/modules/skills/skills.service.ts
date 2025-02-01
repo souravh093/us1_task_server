@@ -64,7 +64,10 @@ const getSkillByIdFromDB = async (id: string) => {
   return result;
 };
 
-const updateSkillIntoDB = async (id: string, payload: Skill) => {
+const updateSkillIntoDB = async (
+  id: string,
+  payload: Skill & { availability: any[] },
+) => {
   await prisma.skill.findUniqueOrThrow({
     where: {
       id,
@@ -75,8 +78,28 @@ const updateSkillIntoDB = async (id: string, payload: Skill) => {
     where: {
       id,
     },
-    data: payload,
+    data: {
+      ...payload,
+      availability: {
+        upsert: payload.availability.map((availability: any) => ({
+          where: { id: availability.id || '' },
+          create: {
+            dayOfWeek: availability.dayOfWeek,
+            status: availability.status,
+            startTime: availability.startTime,
+            endTime: availability.endTime,
+          },
+          update: {
+            dayOfWeek: availability.dayOfWeek,
+            status: availability.status,
+            startTime: availability.startTime,
+            endTime: availability.endTime,
+          },
+        })),
+      },
+    },
   });
+
 
   return result;
 };

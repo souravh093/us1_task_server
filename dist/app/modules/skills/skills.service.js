@@ -72,7 +72,23 @@ const updateSkillIntoDB = (id, payload) => __awaiter(void 0, void 0, void 0, fun
         where: {
             id,
         },
-        data: payload,
+        data: Object.assign(Object.assign({}, payload), { availability: {
+                upsert: payload.availability.map((availability) => ({
+                    where: { id: availability.id || '' },
+                    create: {
+                        dayOfWeek: availability.dayOfWeek,
+                        status: availability.status,
+                        startTime: availability.startTime,
+                        endTime: availability.endTime,
+                    },
+                    update: {
+                        dayOfWeek: availability.dayOfWeek,
+                        status: availability.status,
+                        startTime: availability.startTime,
+                        endTime: availability.endTime,
+                    },
+                })),
+            } }),
     });
     return result;
 });

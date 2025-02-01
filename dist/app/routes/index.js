@@ -6,6 +6,7 @@ const auth_routes_1 = require("../modules/auth/auth.routes");
 const skills_routes_1 = require("../modules/skills/skills.routes");
 const availability_routes_1 = require("../modules/availability/availability.routes");
 const session_routes_1 = require("../modules/session/session.routes");
+const review_routes_1 = require("../modules/review/review.routes");
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -27,6 +28,10 @@ const moduleRoutes = [
     {
         path: '/sessions',
         route: session_routes_1.SessionRoutes,
+    },
+    {
+        path: '/reviews',
+        route: review_routes_1.ReviewRoutes,
     },
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
